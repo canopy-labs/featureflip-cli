@@ -1,0 +1,74 @@
+# Builds the featureflip binary for every supported platform and publishes it
+# to this repository's GitHub release and the canopy-labs/homebrew-tap cask.
+version: 2
+
+project_name: featureflip
+
+before:
+  hooks:
+    - go mod tidy -diff
+
+builds:
+  - id: featureflip
+    main: ./cmd/featureflip
+    binary: featureflip
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    flags: [-trimpath]
+    ldflags:
+      - -s -w
+      - -X github.com/canopy-labs/featureflip-cli/internal/version.Version={{ .Version }}
+      - -X github.com/canopy-labs/featureflip-cli/internal/version.Commit={{ .ShortCommit }}
+
+archives:
+  - id: featureflip
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: "featureflip_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  # Release notes come from CHANGELOG.md (--release-notes), not git history.
+  disable: true
+
+release:
+  github:
+    owner: canopy-labs
+    name: featureflip-cli
+  # A -beta/-rc tag must not become the release people get as "latest".
+  prerelease: auto
+  # A re-run after a partial upload replaces what's there instead of failing.
+  replace_existing_artifacts: true
+
+homebrew_casks:
+  - name: featureflip
+    repository:
+      owner: canopy-labs
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Casks
+    # Pre-releases don't update the cask.
+    skip_upload: auto
+    homepage: https://featureflip.io/docs/integrations/cli/
+    description: Manage Featureflip feature flags from the terminal
+    license: Apache-2.0
+    commit_author:
+      name: featureflip-release-bot
+      email: github-actions[bot]@users.noreply.github.com
+    hooks:
+      post:
+        # The binary isn't notarized; without this macOS refuses to run it.
+        install_steps: |
+          on_macos do
+            run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{ .StagedPath }}/featureflip"]
+          end
