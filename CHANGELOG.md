@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 — 2026-11-18
+
+### Added
+
+- `flags on` and `flags off` explain a change freeze: they exit with code 8 (it was 1) and print the freeze's name, environment and end time. With `--json`, the error carries the freeze as `change_freeze`.
+- `--break-freeze` on `flags on` and `flags off` lets an Owner or Admin break an active change freeze for one change. It needs `--reason`.
+
 ## 0.1.0 — 2026-11-11
 
 ### Added

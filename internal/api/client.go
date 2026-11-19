@@ -84,6 +84,19 @@ type Request struct {
 	// Replayable marks a POST that is safe to send twice (it sets state rather
 	// than creating something), so it retries like a GET.
 	Replayable bool
+	// FreezeOverride sends X-Freeze-Override: true, which lets an Owner or
+	// Admin break an active change freeze for this one request. The server
+	// requires a Reason with it.
+	FreezeOverride bool
+}
+
+// ChangeFreeze is the window behind a 423 change_frozen error.
+type ChangeFreeze struct {
+	ID             string  `json:"id"`
+	Name           string  `json:"name"`
+	EnvironmentKey string  `json:"environment_key"`
+	EndsAt         *string `json:"ends_at"` // RFC 3339 UTC; nil for an open-ended freeze
+	CanOverride    bool    `json:"can_override"`
 }
 
 // Error is a non-2xx response, decoded from the API's error envelope when
@@ -98,6 +111,8 @@ type Error struct {
 	RetryAfter  *int
 	PlanLimit   json.RawMessage
 	NextActions json.RawMessage
+	// ChangeFreeze names the freeze that refused a 423 change_frozen write.
+	ChangeFreeze *ChangeFreeze
 	// Wait is how long the server asked us to wait before retrying (429).
 	Wait time.Duration
 }
@@ -122,6 +137,8 @@ func (e *Error) ExitCode() int {
 		return exitcode.Rejected
 	case "change_reason_required":
 		return exitcode.Usage
+	case "change_frozen":
+		return exitcode.Frozen
 	}
 	switch e.Status {
 	case 401, 403:
@@ -130,19 +147,22 @@ func (e *Error) ExitCode() int {
 		return exitcode.NotFound
 	case 400, 409, 412, 422:
 		return exitcode.Rejected
+	case 423:
+		return exitcode.Frozen
 	}
 	return exitcode.Unexpected
 }
 
 type envelope struct {
-	Error       string              `json:"error"`
-	Message     string              `json:"message"`
-	DocsURL     string              `json:"docs_url"`
-	Fields      map[string][]string `json:"fields"`
-	RetryAfter  *int                `json:"retry_after"`
-	DidYouMean  []string            `json:"did_you_mean"`
-	PlanLimit   json.RawMessage     `json:"plan_limit"`
-	NextActions json.RawMessage     `json:"next_actions"`
+	Error        string              `json:"error"`
+	Message      string              `json:"message"`
+	DocsURL      string              `json:"docs_url"`
+	Fields       map[string][]string `json:"fields"`
+	RetryAfter   *int                `json:"retry_after"`
+	DidYouMean   []string            `json:"did_you_mean"`
+	PlanLimit    json.RawMessage     `json:"plan_limit"`
+	NextActions  json.RawMessage     `json:"next_actions"`
+	ChangeFreeze *ChangeFreeze       `json:"change_freeze"`
 }
 
 type noTokenError struct{}
@@ -240,6 +260,9 @@ func (c *Client) send(ctx context.Context, method, target string, body []byte, r
 	if strings.TrimSpace(req.Reason) != "" {
 		r.Header.Set("X-Intent-Reason", encodeURIComponent(req.Reason))
 	}
+	if req.FreezeOverride {
+		r.Header.Set("X-Freeze-Override", "true")
+	}
 	return c.http.Do(r)
 }
 
@@ -256,7 +279,7 @@ func decodeError(resp *http.Response, path Path) *Error {
 	if json.Unmarshal(raw, &env) == nil && env.Error != "" {
 		e.Code, e.Message, e.DocsURL = env.Error, env.Message, env.DocsURL
 		e.Fields, e.DidYouMean, e.RetryAfter = env.Fields, env.DidYouMean, env.RetryAfter
-		e.PlanLimit, e.NextActions = env.PlanLimit, env.NextActions
+		e.PlanLimit, e.NextActions, e.ChangeFreeze = env.PlanLimit, env.NextActions, env.ChangeFreeze
 	} else {
 		e.Code = fmt.Sprintf("http_%d", resp.StatusCode)
 		e.Message = fmt.Sprintf("HTTP %d from %s", resp.StatusCode, path.String())

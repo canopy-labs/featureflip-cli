@@ -15,12 +15,15 @@ import (
 func newFlipCmd(env Env, g *globals, on bool) *cobra.Command {
 	word := stateWord(on)
 	var envKey, reason string
+	var breakFreeze bool
 	cmd := &cobra.Command{
 		Use:   word + " <flag> --env <environment>",
 		Short: fmt.Sprintf("Turn a flag %s in one environment", word),
 		Long: fmt.Sprintf("Turns a flag %s in one environment. Nothing is sent if it is already %s.\n\n"+
 			"An environment that requires a change reason needs --reason. One that requires\n"+
-			"confirmation asks you to type its key, or needs --yes when no one is at a terminal.", word, word),
+			"confirmation asks you to type its key, or needs --yes when no one is at a terminal.\n\n"+
+			"An Owner or Admin can break an active change freeze for this one change with\n"+
+			"--break-freeze, which needs --reason.", word, word),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			key := args[0]
@@ -29,6 +32,9 @@ func newFlipCmd(env Env, g *globals, on bool) *cobra.Command {
 			}
 			if err := checkKey("--env", envKey); err != nil {
 				return err
+			}
+			if breakFreeze && strings.TrimSpace(reason) == "" {
+				return UsageError{`--break-freeze needs --reason "<why>"; the reason is recorded in the audit log`}
 			}
 			s, err := newSession(env, g)
 			if err != nil {
@@ -69,7 +75,7 @@ func newFlipCmd(env Env, g *globals, on bool) *cobra.Command {
 
 			enabled := on
 			err = s.API.Do(ctx, "POST", append(cfgPath, "toggle"),
-				api.Request{Body: api.ToggleRequest{Enabled: &enabled}, Reason: reason, Replayable: true}, nil)
+				api.Request{Body: api.ToggleRequest{Enabled: &enabled}, Reason: reason, FreezeOverride: breakFreeze, Replayable: true}, nil)
 			if err != nil {
 				return withReasonHint(err)
 			}
@@ -83,6 +89,7 @@ func newFlipCmd(env Env, g *globals, on bool) *cobra.Command {
 	}
 	cmd.Flags().StringVar(&envKey, "env", "", "environment key (required)")
 	cmd.Flags().StringVar(&reason, "reason", "", "why you are making the change (required by some environments)")
+	cmd.Flags().BoolVar(&breakFreeze, "break-freeze", false, "break an active change freeze for this change (Owner/Admin; needs --reason)")
 	cmd.MarkFlagRequired("env")
 	return cmd
 }

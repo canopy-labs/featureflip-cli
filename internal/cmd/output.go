@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strings"
 	"text/tabwriter"
+	"time"
 
 	"github.com/canopy-labs/featureflip-cli/internal/api"
 )
@@ -81,6 +82,9 @@ func renderError(env Env, g *globals, err error) {
 			if len(apiErr.PlanLimit) > 0 && string(apiErr.PlanLimit) != "null" {
 				doc["plan_limit"] = apiErr.PlanLimit
 			}
+			if apiErr.ChangeFreeze != nil {
+				doc["change_freeze"] = apiErr.ChangeFreeze
+			}
 		}
 		printJSON(env.Out, doc)
 		return
@@ -104,6 +108,26 @@ func renderError(env Env, g *globals, err error) {
 	if apiErr.Status == 404 {
 		fmt.Fprintln(env.Err, notFoundHint)
 	}
+	if f := apiErr.ChangeFreeze; f != nil {
+		fmt.Fprintln(env.Err, freezeHint(f))
+	}
+}
+
+// freezeHint names the freeze that refused a write and the way past it, if
+// the caller has one.
+func freezeHint(f *api.ChangeFreeze) string {
+	until := "until it is ended"
+	if f.EndsAt != nil {
+		until = "until " + *f.EndsAt
+		if t, err := time.Parse(time.RFC3339Nano, *f.EndsAt); err == nil {
+			until = "until " + t.UTC().Format("2006-01-02 15:04") + " UTC"
+		}
+	}
+	msg := fmt.Sprintf("Change freeze %q covers %s %s.", f.Name, f.EnvironmentKey, until)
+	if f.CanOverride {
+		return msg + ` To break it for this one change, re-run with --break-freeze --reason "<why>".`
+	}
+	return msg + " Your token can't break it: ask an Owner or Admin to make the change, or to end the freeze."
 }
 
 // errorCode is the machine-readable "error" value for --json output.

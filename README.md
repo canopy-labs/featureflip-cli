@@ -79,6 +79,19 @@ Some environments protect changes, and the CLI follows the same rules as the das
 featureflip flags on new-checkout --env production --reason "Launch day" --yes
 ```
 
+During a change freeze the API refuses the flip and the CLI exits with code 8, naming the freeze and when it ends:
+
+```
+Error: A change freeze covers production.
+Change freeze "Holiday freeze" covers production until 2026-12-27 09:00 UTC. To break it for this one change, re-run with --break-freeze --reason "<why>".
+```
+
+An Owner or Admin can break the freeze for one change with `--break-freeze`, which needs `--reason`. With `--json`, the error document carries the freeze as `change_freeze` (`id`, `name`, `environment_key`, `ends_at`, `can_override`).
+
+```sh
+featureflip flags off new-checkout --env production --break-freeze --reason "Incident: checkout 500s"
+```
+
 Check a flag in every environment:
 
 ```sh
@@ -120,10 +133,11 @@ With `--json`, stdout carries exactly one JSON document, whether the command suc
 
 ```json
 {
-  "error": "flag_not_found",
-  "message": "No flag 'new-chekout'.",
-  "status": 404,
-  "did_you_mean": ["new-checkout"]
+  "did_you_mean": ["new-checkout"],
+  "docs_url": "https://featureflip.io/docs/management-api/errors/not_found",
+  "error": "not_found",
+  "message": "Flag not found",
+  "status": 404
 }
 ```
 
@@ -139,6 +153,7 @@ Exit codes:
 | 5 | The API rejected the change, e.g. a plan limit or a validation error |
 | 6 | Confirmation was declined, or required without `--yes` |
 | 7 | `generate types --check` found the file out of date |
+| 8 | A change freeze covers the environment |
 
 Requests that are safe to repeat are retried on transient gateway errors, and a create is sent with an idempotency key so a retry can't make two flags.
 

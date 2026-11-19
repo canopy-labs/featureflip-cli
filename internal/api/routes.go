@@ -28,7 +28,7 @@ var Routes = []Route{
 	{Method: "GET", Template: flag},
 	{Method: "GET", Template: flag + "/environments"},
 	{Method: "GET", Template: flag + "/environments/{env}"},
-	{Method: "POST", Template: flag + "/environments/{env}/toggle", Headers: []string{"X-Intent-Reason"}},
+	{Method: "POST", Template: flag + "/environments/{env}/toggle", Headers: []string{"X-Intent-Reason", "X-Freeze-Override"}},
 	{Method: "POST", Template: flag + "/archive", Query: []string{"force"}, Headers: []string{"X-Intent-Reason"}},
 	{Method: "POST", Template: flag + "/restore", Headers: []string{"X-Intent-Reason"}},
 }

@@ -89,6 +89,7 @@ func TestContractDTOFieldsExist(t *testing.T) {
 		{ToggleRequest{}, "PublicToggleFlagRequest"},
 		{Page[json.RawMessage]{}, "PublicFlagListItemPagedResult"},
 		{envelope{}, "PublicApiErrorEnvelope"},
+		{ChangeFreeze{}, "PublicChangeFreeze"},
 	}
 	for _, c := range cases {
 		schema, ok := schemas[c.schema].(map[string]any)

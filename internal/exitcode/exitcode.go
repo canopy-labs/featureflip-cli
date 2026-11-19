@@ -13,6 +13,7 @@ const (
 	Rejected   = 5 // the API refused the change (400/409/412/422, plan limit)
 	Confirm    = 6 // confirmation declined, or required without a terminal
 	Drift      = 7 // generate types --check found a difference
+	Frozen     = 8 // a change freeze covers the environment (423 change_frozen)
 )
 
 // Coded is an error that knows which exit code it should produce.

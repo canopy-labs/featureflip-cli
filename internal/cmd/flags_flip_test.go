@@ -257,3 +257,96 @@ func TestEmptyAndDotKeysAreUsageErrors(t *testing.T) {
 		}
 	}
 }
+
+const frozenBody = `{"error":"change_frozen","message":"A change freeze covers production.","docs_url":"https://d",` +
+	`"change_freeze":{"id":"f1","name":"Holiday freeze","environment_key":"production","ends_at":"2026-12-27T09:00:00Z","can_override":%t}}`
+
+func TestFlipFrozenExplainsAndExits8(t *testing.T) {
+	api := flipAPI(t, false, false, false)
+	api.on("POST", togglePath, 423, fmt.Sprintf(frozenBody, true))
+	_, errOut, code := run(t, runOpts{API: api, Env: scoped}, "flags", "on", "new-checkout", "--env", "production")
+	if code != 8 {
+		t.Fatalf("exit %d, want 8", code)
+	}
+	for _, want := range []string{
+		`Change freeze "Holiday freeze" covers production until 2026-12-27 09:00 UTC`,
+		`--break-freeze --reason "<why>"`,
+	} {
+		if !strings.Contains(errOut, want) {
+			t.Errorf("stderr %q lacks %q", errOut, want)
+		}
+	}
+}
+
+func TestFlipFrozenWithoutOverrideRight(t *testing.T) {
+	api := flipAPI(t, false, false, false)
+	api.on("POST", togglePath, 423, strings.Replace(fmt.Sprintf(frozenBody, false), `"2026-12-27T09:00:00Z"`, "null", 1))
+	_, errOut, code := run(t, runOpts{API: api, Env: scoped}, "flags", "on", "new-checkout", "--env", "production")
+	if code != 8 {
+		t.Fatalf("exit %d, want 8", code)
+	}
+	if !strings.Contains(errOut, `covers production until it is ended`) || !strings.Contains(errOut, "Owner or Admin") ||
+		strings.Contains(errOut, "--break-freeze") {
+		t.Errorf("stderr = %q", errOut)
+	}
+}
+
+func TestFlipFrozenJSON(t *testing.T) {
+	api := flipAPI(t, false, false, false)
+	api.on("POST", togglePath, 423, fmt.Sprintf(frozenBody, true))
+	out, _, code := run(t, runOpts{API: api, Env: scoped}, "flags", "on", "new-checkout", "--env", "production", "--json")
+	if code != 8 {
+		t.Fatalf("exit %d, want 8", code)
+	}
+	var doc struct {
+		Error        string         `json:"error"`
+		Status       int            `json:"status"`
+		ChangeFreeze map[string]any `json:"change_freeze"`
+	}
+	if err := json.Unmarshal([]byte(out), &doc); err != nil {
+		t.Fatalf("%v: %s", err, out)
+	}
+	if doc.Error != "change_frozen" || doc.Status != 423 || doc.ChangeFreeze["name"] != "Holiday freeze" ||
+		doc.ChangeFreeze["environment_key"] != "production" || doc.ChangeFreeze["can_override"] != true ||
+		doc.ChangeFreeze["ends_at"] != "2026-12-27T09:00:00Z" {
+		t.Errorf("doc = %s", out)
+	}
+}
+
+func TestFlipBreakFreezeSendsOverride(t *testing.T) {
+	api := flipAPI(t, false, false, false)
+	_, _, code := run(t, runOpts{API: api, Env: scoped},
+		"flags", "on", "new-checkout", "--env", "production", "--break-freeze", "--reason", "incident 42")
+	if code != 0 {
+		t.Fatalf("exit %d", code)
+	}
+	h := api.calls("POST", togglePath)[0].Header
+	if h.Get("X-Freeze-Override") != "true" || h.Get("X-Intent-Reason") != "incident%2042" {
+		t.Errorf("headers = %v", h)
+	}
+}
+
+func TestFlipWithoutBreakFreezeSendsNoOverride(t *testing.T) {
+	api := flipAPI(t, false, false, false)
+	run(t, runOpts{API: api, Env: scoped}, "flags", "on", "new-checkout", "--env", "production")
+	if got := api.calls("POST", togglePath)[0].Header.Get("X-Freeze-Override"); got != "" {
+		t.Errorf("X-Freeze-Override = %q", got)
+	}
+}
+
+func TestFlipBreakFreezeNeedsReason(t *testing.T) {
+	for _, reason := range []string{"", "   "} {
+		api := flipAPI(t, false, false, false)
+		_, errOut, code := run(t, runOpts{API: api, Env: scoped},
+			"flags", "on", "new-checkout", "--env", "production", "--break-freeze", "--reason", reason)
+		if code != 2 {
+			t.Fatalf("reason %q: exit %d, want 2", reason, code)
+		}
+		if api.count("GET")+api.count("POST") != 0 {
+			t.Errorf("reason %q: sent requests before refusing", reason)
+		}
+		if !strings.Contains(errOut, "--break-freeze needs --reason") {
+			t.Errorf("stderr = %q", errOut)
+		}
+	}
+}

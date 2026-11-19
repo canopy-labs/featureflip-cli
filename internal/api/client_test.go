@@ -300,3 +300,42 @@ func TestNewIdempotencyKeyIsUUIDv4(t *testing.T) {
 		t.Error("keys repeat")
 	}
 }
+
+func TestDecodesChangeFreeze(t *testing.T) {
+	c, _ := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(423)
+		w.Write([]byte(`{"error":"change_frozen","message":"production is frozen.","change_freeze":{"id":"f1","name":"Holiday freeze","environment_key":"production","ends_at":"2026-12-27T09:00:00Z","can_override":true}}`))
+	})
+	err := c.Do(context.Background(), "POST", P("x"), Request{}, nil)
+	var apiErr *Error
+	if !errors.As(err, &apiErr) || apiErr.ChangeFreeze == nil {
+		t.Fatalf("err = %v", err)
+	}
+	f := apiErr.ChangeFreeze
+	if f.ID != "f1" || f.Name != "Holiday freeze" || f.EnvironmentKey != "production" || !f.CanOverride ||
+		f.EndsAt == nil || *f.EndsAt != "2026-12-27T09:00:00Z" {
+		t.Errorf("change_freeze = %+v", f)
+	}
+	if apiErr.ExitCode() != 8 {
+		t.Errorf("exit = %d, want 8", apiErr.ExitCode())
+	}
+}
+
+func TestAnyLockedResponseIsFrozen(t *testing.T) {
+	if got := (&Error{Status: 423, Code: "http_423"}).ExitCode(); got != 8 {
+		t.Errorf("bare 423: exit %d, want 8", got)
+	}
+}
+
+func TestFreezeOverrideHeader(t *testing.T) {
+	var got []string
+	c, _ := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
+		got = append(got, r.Header.Get("X-Freeze-Override"))
+		w.WriteHeader(204)
+	})
+	c.Do(context.Background(), "POST", P("x"), Request{FreezeOverride: true, Reason: "hotfix"}, nil)
+	c.Do(context.Background(), "POST", P("x"), Request{Reason: "hotfix"}, nil)
+	if !reflect.DeepEqual(got, []string{"true", ""}) {
+		t.Errorf("X-Freeze-Override = %q", got)
+	}
+}
