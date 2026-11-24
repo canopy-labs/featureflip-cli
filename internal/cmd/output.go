@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/canopy-labs/featureflip-cli/internal/api"
+	"github.com/canopy-labs/featureflip-cli/internal/importer"
 )
 
 func printJSON(w io.Writer, v any) error {
@@ -86,6 +87,12 @@ func renderError(env Env, g *globals, err error) {
 				doc["change_freeze"] = apiErr.ChangeFreeze
 			}
 		}
+		// An import that failed part way says what it wrote: the same target
+		// the success document carries, with each step's done and created.
+		var applyErr *importer.ApplyError
+		if errors.As(err, &applyErr) && applyErr.Plan != nil {
+			doc["target"] = applyErr.Plan
+		}
 		printJSON(env.Out, doc)
 		return
 	}
@@ -146,6 +153,12 @@ func errorCode(err error) string {
 		return "unauthorized"
 	case errors.As(err, new(driftError)):
 		return "drift"
+	case errors.As(err, new(*importer.LimitError)):
+		return "plan_limit_reached"
+	case errors.As(err, new(importer.OptionError)):
+		return "usage"
+	case errors.As(err, new(sourceKeyError)):
+		return "unauthorized"
 	}
 	return "unexpected"
 }

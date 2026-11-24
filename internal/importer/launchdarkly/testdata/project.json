@@ -1,0 +1,3251 @@
+{
+ "environments": [
+  {
+   "key": "test",
+   "name": "Test"
+  },
+  {
+   "key": "production",
+   "name": "Production"
+  }
+ ],
+ "flags": [
+  {
+   "key": "bool-flag",
+   "name": "bool-flag",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [
+    "web"
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   },
+   "clientSideAvailability": {
+    "usingEnvironmentId": true,
+    "usingMobileKey": false
+   }
+  },
+  {
+   "key": "color",
+   "name": "Color",
+   "description": "Theme color",
+   "kind": "multivariate",
+   "variations": [
+    {
+     "value": "Blue Sky"
+    },
+    {
+     "value": "red"
+    },
+    {
+     "value": "green",
+     "name": "Primary"
+    }
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": false,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "limit",
+   "name": "Limit",
+   "kind": "multivariate",
+   "variations": [
+    {
+     "value": 1
+    },
+    {
+     "value": 2.5
+    }
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "config",
+   "name": "Config",
+   "kind": "multivariate",
+   "variations": [
+    {
+     "value": {
+      "b": 1,
+      "a": 2
+     }
+    },
+    {
+     "value": {
+      "x": [
+       1
+      ]
+     }
+    }
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "dupe-names",
+   "name": "Dupes",
+   "kind": "multivariate",
+   "variations": [
+    {
+     "value": "x",
+     "name": "A"
+    },
+    {
+     "value": "y",
+     "name": "A"
+    }
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 0
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "My.Flag",
+   "name": "My.Flag",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "a_b",
+   "name": "a_b",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "a-b",
+   "name": "a-b",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "A-B",
+   "name": "A-B",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "kill-switch",
+   "name": "kill-switch",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": false,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "soft-kill",
+   "name": "soft-kill",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "targeted",
+   "name": "targeted",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [
+      {
+       "values": [
+        "u1",
+        "u2"
+       ],
+       "variation": 0,
+       "contextKind": "user"
+      }
+     ],
+     "contextTargets": [
+      {
+       "values": [],
+       "variation": 0,
+       "contextKind": "user"
+      },
+      {
+       "values": [
+        "o1"
+       ],
+       "variation": 1,
+       "contextKind": "organization"
+      }
+     ],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [
+      {
+       "values": [
+        "u1",
+        "u2"
+       ],
+       "variation": 0,
+       "contextKind": "user"
+      }
+     ],
+     "contextTargets": [
+      {
+       "values": [],
+       "variation": 0,
+       "contextKind": "user"
+      },
+      {
+       "values": [
+        "o1"
+       ],
+       "variation": 1,
+       "contextKind": "organization"
+      }
+     ],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "ops",
+   "name": "ops",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "startsWith",
+         "values": [
+          "admin"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "endsWith",
+         "values": [
+          "@acme.com"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "name",
+         "op": "contains",
+         "values": [
+          "bob"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "matches",
+         "values": [
+          "^a.*"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "lessThan",
+         "values": [
+          1.5
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "lessThanOrEqual",
+         "values": [
+          2
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "greaterThan",
+         "values": [
+          3
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "greaterThanOrEqual",
+         "values": [
+          4
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "signup",
+         "op": "before",
+         "values": [
+          1700000000000
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "signup",
+         "op": "after",
+         "values": [
+          "2024-01-01T00:00:00Z"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerEqual",
+         "values": [
+          "1.2.3"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerLessThan",
+         "values": [
+          "2.0"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerGreaterThan",
+         "values": [
+          "1.0.0"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "beta",
+         "op": "in",
+         "values": [
+          true
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "startsWith",
+         "values": [
+          "admin"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "endsWith",
+         "values": [
+          "@acme.com"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "name",
+         "op": "contains",
+         "values": [
+          "bob"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "email",
+         "op": "matches",
+         "values": [
+          "^a.*"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "lessThan",
+         "values": [
+          1.5
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "lessThanOrEqual",
+         "values": [
+          2
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "greaterThan",
+         "values": [
+          3
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "age",
+         "op": "greaterThanOrEqual",
+         "values": [
+          4
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "signup",
+         "op": "before",
+         "values": [
+          1700000000000
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "signup",
+         "op": "after",
+         "values": [
+          "2024-01-01T00:00:00Z"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerEqual",
+         "values": [
+          "1.2.3"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerLessThan",
+         "values": [
+          "2.0"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "version",
+         "op": "semVerGreaterThan",
+         "values": [
+          "1.0.0"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "beta",
+         "op": "in",
+         "values": [
+          true
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "bad-op",
+   "name": "bad-op",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "x",
+         "op": "frobnicate",
+         "values": [
+          "1"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "x",
+         "op": "frobnicate",
+         "values": [
+          "1"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "negated",
+   "name": "negated",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": true,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "key",
+         "op": "in",
+         "values": [
+          "u1"
+         ],
+         "negate": true,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": true,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "key",
+         "op": "in",
+         "values": [
+          "u1"
+         ],
+         "negate": true,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "kinds",
+   "name": "kinds",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "gold"
+         ],
+         "negate": false,
+         "contextKind": "organization"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "/email",
+         "op": "in",
+         "values": [
+          "a@b.c"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "gold"
+         ],
+         "negate": false,
+         "contextKind": "organization"
+        }
+       ],
+       "variation": 0
+      },
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "/email",
+         "op": "in",
+         "values": [
+          "a@b.c"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "nested-attr",
+   "name": "nested-attr",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "/address/city",
+         "op": "in",
+         "values": [
+          "Paris"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "/address/city",
+         "op": "in",
+         "values": [
+          "Paris"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "kind-clause",
+   "name": "kind-clause",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "kind",
+         "op": "in",
+         "values": [
+          "organization"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "kind",
+         "op": "in",
+         "values": [
+          "organization"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "rollouts",
+   "name": "rollouts",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "a",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 30000
+         },
+         {
+          "variation": 1,
+          "weight": 70000
+         }
+        ]
+       }
+      },
+      {
+       "_id": "b",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "a"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 100000
+         },
+         {
+          "variation": 1,
+          "weight": 0
+         }
+        ]
+       }
+      },
+      {
+       "_id": "c",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "b"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 50000
+         },
+         {
+          "variation": 1,
+          "weight": 50000
+         }
+        ],
+        "kind": "experiment"
+       }
+      },
+      {
+       "_id": "d",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "c"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 10000
+         },
+         {
+          "variation": 1,
+          "weight": 90000
+         }
+        ],
+        "bucketBy": "email"
+       }
+      },
+      {
+       "_id": "e",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "d"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 20000
+         },
+         {
+          "variation": 1,
+          "weight": 80000
+         }
+        ],
+        "contextKind": "organization"
+       }
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "a",
+       "clauses": [
+        {
+         "attribute": "country",
+         "op": "in",
+         "values": [
+          "US"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 30000
+         },
+         {
+          "variation": 1,
+          "weight": 70000
+         }
+        ]
+       }
+      },
+      {
+       "_id": "b",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "a"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 100000
+         },
+         {
+          "variation": 1,
+          "weight": 0
+         }
+        ]
+       }
+      },
+      {
+       "_id": "c",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "b"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 50000
+         },
+         {
+          "variation": 1,
+          "weight": 50000
+         }
+        ],
+        "kind": "experiment"
+       }
+      },
+      {
+       "_id": "d",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "c"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 10000
+         },
+         {
+          "variation": 1,
+          "weight": 90000
+         }
+        ],
+        "bucketBy": "email"
+       }
+      },
+      {
+       "_id": "e",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "d"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "rollout": {
+        "variations": [
+         {
+          "variation": 0,
+          "weight": 20000
+         },
+         {
+          "variation": 1,
+          "weight": 80000
+         }
+        ],
+        "contextKind": "organization"
+       }
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "three-way",
+   "name": "Three way",
+   "kind": "multivariate",
+   "variations": [
+    {
+     "value": "a"
+    },
+    {
+     "value": "b"
+    },
+    {
+     "value": "c"
+    }
+   ],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "rollout": {
+       "variations": [
+        {
+         "variation": 0,
+         "weight": 33333
+        },
+        {
+         "variation": 1,
+         "weight": 33333
+        },
+        {
+         "variation": 2,
+         "weight": 33334
+        }
+       ]
+      }
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 0,
+     "fallthrough": {
+      "rollout": {
+       "variations": [
+        {
+         "variation": 0,
+         "weight": 50000
+        },
+        {
+         "variation": 1,
+         "weight": 50000
+        },
+        {
+         "variation": 2,
+         "weight": 0
+        }
+       ]
+      }
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "disabled-rule",
+   "name": "disabled-rule",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "x"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0,
+       "disabled": true,
+       "description": "Old rule"
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "plan",
+         "op": "in",
+         "values": [
+          "x"
+         ],
+         "negate": false,
+         "contextKind": "user"
+        }
+       ],
+       "variation": 0,
+       "disabled": true,
+       "description": "Old rule"
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "fallthrough-rollout",
+   "name": "fallthrough-rollout",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "rollout": {
+       "variations": [
+        {
+         "variation": 0,
+         "weight": 25000
+        },
+        {
+         "variation": 1,
+         "weight": 75000
+        }
+       ]
+      }
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "rollout": {
+       "variations": [
+        {
+         "variation": 0,
+         "weight": 25000
+        },
+        {
+         "variation": 1,
+         "weight": 75000
+        }
+       ]
+      }
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "deprecated",
+   "name": "deprecated",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   },
+   "deprecated": true
+  },
+  {
+   "key": "uses-beta",
+   "name": "uses-beta",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "beta-users"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "beta-users"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-staff",
+   "name": "uses-staff",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "staff"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "staff"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-vip",
+   "name": "uses-vip",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "vip"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "vip"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "not-vip",
+   "name": "not-vip",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "vip"
+         ],
+         "negate": true
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "vip"
+         ],
+         "negate": true
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-big",
+   "name": "uses-big",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "big"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "big"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-weighted",
+   "name": "uses-weighted",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "weighted"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "weighted"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-nested",
+   "name": "uses-nested",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "nested"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "nested"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-empty",
+   "name": "uses-empty",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "empty"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "empty"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "uses-missing",
+   "name": "uses-missing",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "missing-in-test"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [
+      {
+       "_id": "r",
+       "clauses": [
+        {
+         "attribute": "",
+         "op": "segmentMatch",
+         "values": [
+          "missing-in-test"
+         ],
+         "negate": false
+        }
+       ],
+       "variation": 0
+      }
+     ],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "parent",
+   "name": "parent",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": []
+    }
+   }
+  },
+  {
+   "key": "child",
+   "name": "child",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "parent",
+       "variation": 0
+      }
+     ]
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "parent",
+       "variation": 0
+      }
+     ]
+    }
+   }
+  },
+  {
+   "key": "child-of-false",
+   "name": "child-of-false",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "parent",
+       "variation": 1
+      }
+     ]
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "parent",
+       "variation": 1
+      }
+     ]
+    }
+   }
+  },
+  {
+   "key": "needs-kill",
+   "name": "needs-kill",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "kill-switch",
+       "variation": 0
+      }
+     ]
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "kill-switch",
+       "variation": 0
+      }
+     ]
+    }
+   }
+  },
+  {
+   "key": "needs-needs-kill",
+   "name": "needs-needs-kill",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "needs-kill",
+       "variation": 0
+      }
+     ]
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "needs-kill",
+       "variation": 0
+      }
+     ]
+    }
+   }
+  },
+  {
+   "key": "needs-gone",
+   "name": "needs-gone",
+   "kind": "boolean",
+   "variations": [
+    {
+     "value": true,
+     "name": "On"
+    },
+    {
+     "value": false,
+     "name": "Off"
+    }
+   ],
+   "tags": [],
+   "environments": {
+    "test": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "gone",
+       "variation": 0
+      }
+     ]
+    },
+    "production": {
+     "on": true,
+     "offVariation": 1,
+     "fallthrough": {
+      "variation": 1
+     },
+     "targets": [],
+     "contextTargets": [],
+     "rules": [],
+     "prerequisites": [
+      {
+       "key": "gone",
+       "variation": 0
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "segments": {
+  "test": [
+   {
+    "key": "beta-users",
+    "name": "Beta-Users",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "email",
+        "op": "endsWith",
+        "values": [
+         "@acme.com"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "vip",
+    "name": "Vip",
+    "included": [
+     "u1"
+    ],
+    "excluded": [
+     "u2"
+    ],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "plan",
+        "op": "in",
+        "values": [
+         "gold"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "big",
+    "name": "Big",
+    "included": [],
+    "excluded": [],
+    "rules": [],
+    "unbounded": true
+   },
+   {
+    "key": "weighted",
+    "name": "Weighted",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "plan",
+        "op": "in",
+        "values": [
+         "x"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ],
+      "weight": 50000
+     }
+    ]
+   },
+   {
+    "key": "nested",
+    "name": "Nested",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "",
+        "op": "segmentMatch",
+        "values": [
+         "vip"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "empty",
+    "name": "Empty",
+    "included": [],
+    "excluded": [],
+    "rules": []
+   },
+   {
+    "key": "org-members",
+    "name": "Org-Members",
+    "included": [],
+    "excluded": [],
+    "rules": [],
+    "includedContexts": [
+     {
+      "contextKind": "organization",
+      "values": [
+       "o1"
+      ]
+     }
+    ]
+   },
+   {
+    "key": "staff",
+    "name": "Staff",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "team",
+        "op": "in",
+        "values": [
+         "eng"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "unused-diff",
+    "name": "Unused-Diff",
+    "included": [
+     "a"
+    ],
+    "excluded": [],
+    "rules": []
+   }
+  ],
+  "production": [
+   {
+    "key": "beta-users",
+    "name": "Beta-Users",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "email",
+        "op": "endsWith",
+        "values": [
+         "@acme.com"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "vip",
+    "name": "Vip",
+    "included": [
+     "u1"
+    ],
+    "excluded": [
+     "u2"
+    ],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "plan",
+        "op": "in",
+        "values": [
+         "gold"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "big",
+    "name": "Big",
+    "included": [],
+    "excluded": [],
+    "rules": [],
+    "unbounded": true
+   },
+   {
+    "key": "weighted",
+    "name": "Weighted",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "plan",
+        "op": "in",
+        "values": [
+         "x"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ],
+      "weight": 50000
+     }
+    ]
+   },
+   {
+    "key": "nested",
+    "name": "Nested",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "",
+        "op": "segmentMatch",
+        "values": [
+         "vip"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "empty",
+    "name": "Empty",
+    "included": [],
+    "excluded": [],
+    "rules": []
+   },
+   {
+    "key": "org-members",
+    "name": "Org-Members",
+    "included": [],
+    "excluded": [],
+    "rules": [],
+    "includedContexts": [
+     {
+      "contextKind": "organization",
+      "values": [
+       "o1"
+      ]
+     }
+    ]
+   },
+   {
+    "key": "staff",
+    "name": "Staff",
+    "included": [],
+    "excluded": [],
+    "rules": [
+     {
+      "clauses": [
+       {
+        "attribute": "team",
+        "op": "in",
+        "values": [
+         "ops"
+        ],
+        "negate": false,
+        "contextKind": "user"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "unused-diff",
+    "name": "Unused-Diff",
+    "included": [
+     "b"
+    ],
+    "excluded": [],
+    "rules": []
+   },
+   {
+    "key": "missing-in-test",
+    "name": "Missing-In-Test",
+    "included": [
+     "p1"
+    ],
+    "excluded": [],
+    "rules": []
+   }
+  ]
+ },
+ "archived": [
+  "gone"
+ ]
+}

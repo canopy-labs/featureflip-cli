@@ -1,0 +1,894 @@
+{
+ "environments": [
+  {
+   "name": "development",
+   "id": "0.11",
+   "isProduction": false
+  },
+  {
+   "name": "staging",
+   "id": "0.22",
+   "isProduction": false
+  },
+  {
+   "name": "production",
+   "id": "0.33",
+   "isProduction": true
+  }
+ ],
+ "segments": [
+  {
+   "id": "beta_testers",
+   "name": "Beta testers",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r1",
+     "name": "Acme staff",
+     "passPercentage": 100,
+     "environments": null,
+     "conditions": [
+      {
+       "type": "email",
+       "operator": "str_contains_any",
+       "targetValue": [
+        "@acme.com"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vip",
+   "name": "VIP",
+   "idType": "userID",
+   "type": "id_list",
+   "isEnabled": true,
+   "count": 2,
+   "rules": []
+  },
+  {
+   "id": "Internal Or",
+   "name": "Internal",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r2",
+     "name": "US",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "country",
+       "operator": "any",
+       "targetValue": [
+        "US"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "r3",
+     "name": "Pro",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "custom_field",
+       "field": "plan",
+       "operator": "any",
+       "targetValue": [
+        "pro"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "two_multi",
+   "name": "Two multi",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r4",
+     "name": "A",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "custom_field",
+       "field": "plan",
+       "operator": "any",
+       "targetValue": [
+        "pro"
+       ]
+      },
+      {
+       "type": "custom_field",
+       "field": "seats",
+       "operator": "gt",
+       "targetValue": 10
+      }
+     ]
+    },
+    {
+     "id": "r5",
+     "name": "B",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "custom_field",
+       "field": "plan",
+       "operator": "any",
+       "targetValue": [
+        "enterprise"
+       ]
+      },
+      {
+       "type": "locale",
+       "operator": "any",
+       "targetValue": [
+        "en-US"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "partial",
+   "name": "Partial",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r6",
+     "name": "Half",
+     "passPercentage": 50,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "analysis",
+   "name": "Analysis",
+   "idType": "userID",
+   "type": "analysis_list",
+   "isEnabled": true,
+   "rules": []
+  },
+  {
+   "id": "prod_only_seg",
+   "name": "Prod only",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r7",
+     "name": "Prod",
+     "passPercentage": 100,
+     "environments": [
+      "production"
+     ],
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "Beta Users",
+   "name": "Beta Users",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r8",
+     "name": "All",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "custom_field",
+       "field": "beta",
+       "operator": "any",
+       "targetValue": [
+        "yes"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "beta-users",
+   "name": "beta users",
+   "idType": "userID",
+   "type": "rule_based",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "r9",
+     "name": "All",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "custom_field",
+       "field": "tier",
+       "operator": "any",
+       "targetValue": [
+        "b"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "idLists": {
+  "vip": [
+   "u1",
+   "u2"
+  ]
+ },
+ "gates": [
+  {
+   "id": "public_gate",
+   "name": "Public gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "type": "TEMPORARY",
+   "isEnabled": true,
+   "tags": [
+    "checkout"
+   ],
+   "rules": [
+    {
+     "id": "g1",
+     "name": "Everyone",
+     "passPercentage": 100,
+     "environments": null,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rollout_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g2",
+     "name": "Thirty",
+     "passPercentage": 30,
+     "conditions": [
+      {
+       "type": "email",
+       "operator": "any",
+       "targetValue": [
+        "a@x.com"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "g3",
+     "name": "Fraction",
+     "passPercentage": 33.33,
+     "conditions": [
+      {
+       "type": "user_id",
+       "operator": "any",
+       "targetValue": [
+        "u9"
+       ]
+      }
+     ],
+     "pendingAutomatedRollouts": [
+      {
+       "time": 1800000000,
+       "passPercent": 50
+      }
+     ]
+    },
+    {
+     "id": "g4",
+     "name": "Zero",
+     "passPercentage": 0,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "env_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g5",
+     "name": "Prod only",
+     "passPercentage": 100,
+     "environments": [
+      "production"
+     ],
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    },
+    {
+     "id": "g6",
+     "name": "Staging tier",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "environment_tier",
+       "operator": "any",
+       "targetValue": [
+        "staging"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gate_on_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g7",
+     "name": "Needs public",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_gate",
+       "operator": "any",
+       "targetValue": [
+        "public_gate"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "segment_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g8",
+     "name": "Beta",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "beta_testers"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "g9",
+     "name": "Beta in US",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "beta_testers"
+       ]
+      },
+      {
+       "type": "custom_field",
+       "field": "region",
+       "operator": "any",
+       "targetValue": [
+        "us"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "g10",
+     "name": "Internal",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "Internal Or"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "g11",
+     "name": "Not VIP",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "fails_segment",
+       "operator": "any",
+       "targetValue": [
+        "vip"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "expanded_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g12",
+     "name": "Multi",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "two_multi"
+       ]
+      },
+      {
+       "type": "user_id",
+       "operator": "none",
+       "targetValue": [
+        "x"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "Launched Gate",
+   "idType": "userID",
+   "status": "Launched",
+   "isEnabled": false,
+   "rules": [
+    {
+     "id": "g13",
+     "name": "Old",
+     "passPercentage": 10,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "disabled_gate",
+   "idType": "userID",
+   "status": "Disabled",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g14",
+     "name": "Everyone",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "override_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": []
+  },
+  {
+   "id": "fancy_conditions",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g15",
+     "name": "Mixed",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "country",
+       "operator": "any",
+       "targetValue": [
+        "US"
+       ]
+      },
+      {
+       "type": "custom_field",
+       "field": "plan",
+       "operator": "any_case_sensitive",
+       "targetValue": [
+        "Pro"
+       ]
+      },
+      {
+       "type": "unit_id",
+       "customID": "companyID",
+       "operator": "any",
+       "targetValue": [
+        "c1"
+       ]
+      },
+      {
+       "type": "custom_field",
+       "field": "signup",
+       "operator": "after",
+       "targetValue": 1700000000000
+      },
+      {
+       "type": "app_version",
+       "operator": "version_gte",
+       "targetValue": "1.2"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "partial_seg_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g16",
+     "name": "Half segment",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "partial"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "Dup Key",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": []
+  },
+  {
+   "id": "dup-key",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": []
+  },
+  {
+   "id": "a_template",
+   "idType": "userID",
+   "status": "In Progress",
+   "type": "TEMPLATE",
+   "isTemplate": true,
+   "isEnabled": true,
+   "rules": []
+  },
+  {
+   "id": "stable_gate",
+   "idType": "stableID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "targetApps": "web",
+   "holdoutIDs": [
+    "h1"
+   ],
+   "rules": [
+    {
+     "id": "g17",
+     "name": "Half",
+     "passPercentage": 50,
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "collide_seg_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g18",
+     "name": "Beta",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "Beta Users"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "env_seg_gate",
+   "idType": "userID",
+   "status": "In Progress",
+   "isEnabled": true,
+   "rules": [
+    {
+     "id": "g19",
+     "name": "Prod seg",
+     "passPercentage": 100,
+     "conditions": [
+      {
+       "type": "passes_segment",
+       "operator": "any",
+       "targetValue": [
+        "prod_only_seg"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "old_gate",
+   "idType": "userID",
+   "status": "Archived",
+   "isEnabled": true,
+   "rules": []
+  }
+ ],
+ "overrides": {
+  "override_gate": {
+   "passingUserIDs": [
+    "a",
+    "both"
+   ],
+   "failingUserIDs": [
+    "b",
+    "both"
+   ],
+   "environmentOverrides": [
+    {
+     "environment": "staging",
+     "unitID": "stableID",
+     "passingIDs": [
+      "s1"
+     ],
+     "failingIDs": []
+    },
+    {
+     "environment": null,
+     "unitID": "userID",
+     "passingIDs": [
+      "a"
+     ],
+     "failingIDs": []
+    },
+    {
+     "environment": "0.33",
+     "unitID": "userID",
+     "passingIDs": [
+      "prod-only"
+     ],
+     "failingIDs": []
+    }
+   ]
+  }
+ },
+ "dynamicConfigs": [
+  {
+   "id": "two_value",
+   "idType": "userID",
+   "status": "Enabled",
+   "isEnabled": true,
+   "defaultValue": {
+    "a": 1
+   },
+   "rules": [
+    {
+     "id": "c1",
+     "name": "On",
+     "passPercentage": 25,
+     "returnValue": {
+      "a": 2
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "three_value",
+   "idType": "userID",
+   "status": "Enabled",
+   "isEnabled": true,
+   "defaultValue": {},
+   "rules": [
+    {
+     "id": "c2",
+     "name": "Big",
+     "passPercentage": 100,
+     "returnValue": {
+      "size": "L"
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    },
+    {
+     "id": "c3",
+     "name": "Small",
+     "passPercentage": 50,
+     "returnValue": {
+      "size": "S"
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dedupe",
+   "idType": "userID",
+   "status": "Enabled",
+   "isEnabled": true,
+   "defaultValue": {
+    "x": 1,
+    "big": 12345678901234567890
+   },
+   "schema": "{\"type\":\"object\"}",
+   "rules": [
+    {
+     "id": "c4",
+     "name": "Same",
+     "passPercentage": 100,
+     "returnValue": {
+      "big": 12345678901234567890,
+      "x": 1
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "variant_cfg",
+   "idType": "userID",
+   "status": "Enabled",
+   "isEnabled": true,
+   "defaultValue": {},
+   "rules": [
+    {
+     "id": "c5",
+     "name": "Split",
+     "passPercentage": 100,
+     "returnValue": {},
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ],
+     "variants": [
+      {
+       "name": "a",
+       "passPercentage": 50
+      },
+      {
+       "name": "b",
+       "passPercentage": 50
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "disabled_cfg",
+   "idType": "userID",
+   "status": "Disabled",
+   "isEnabled": true,
+   "defaultValue": {
+    "on": false
+   },
+   "rules": []
+  },
+  {
+   "id": "key_clash",
+   "idType": "userID",
+   "status": "Enabled",
+   "isEnabled": true,
+   "defaultValue": {},
+   "rules": [
+    {
+     "id": "c6",
+     "name": "Value 2",
+     "passPercentage": 100,
+     "returnValue": {
+      "a": 1
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    },
+    {
+     "id": "c7",
+     "name": "",
+     "passPercentage": 100,
+     "returnValue": {
+      "a": 2
+     },
+     "conditions": [
+      {
+       "type": "public"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -101,6 +101,7 @@ func newRoot(env Env, g *globals) *cobra.Command {
 		newSegmentsCmd(env, g),
 		newFlagsCmd(env, g),
 		newGenerateCmd(env, g),
+		newImportCmd(env, g),
 	)
 	return root
 }

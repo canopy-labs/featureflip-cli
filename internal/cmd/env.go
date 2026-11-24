@@ -21,7 +21,10 @@ type Env struct {
 	StdoutTTY  bool
 	ConfigDir  func() (string, error)
 	HTTPClient *http.Client
-	Sleep      func(time.Duration)
+	// Sleep replaces every wait between retries; tests set it to record them.
+	// The real process leaves it nil, so each client waits on its context and
+	// Ctrl-C ends a rate-limit wait at once.
+	Sleep func(time.Duration)
 }
 
 // DefaultEnv wires Env to the real process.
@@ -35,6 +38,5 @@ func DefaultEnv() Env {
 		StdoutTTY:  term.IsTerminal(os.Stdout),
 		ConfigDir:  os.UserConfigDir,
 		HTTPClient: &http.Client{Timeout: 30 * time.Second},
-		Sleep:      time.Sleep,
 	}
 }

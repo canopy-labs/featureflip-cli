@@ -210,6 +210,59 @@ func TestRetryAfterOver10sFails(t *testing.T) {
 	}
 }
 
+func TestAPatientPolicyWaitsOutRepeatedLongLimits(t *testing.T) {
+	var calls int32
+	var waits []time.Duration
+	var sleeps []time.Duration
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if atomic.AddInt32(&calls, 1) <= 3 {
+			w.Header().Set("Retry-After", "60")
+			w.WriteHeader(429)
+			return
+		}
+		w.Write([]byte(`{}`))
+	}))
+	t.Cleanup(srv.Close)
+	c := New(Options{BaseURL: srv.URL, Token: "t", Sleep: func(d time.Duration) { sleeps = append(sleeps, d) },
+		RateLimit: &RateLimitPolicy{MaxWait: 2 * time.Minute, Retries: 5, OnWait: func(d time.Duration) { waits = append(waits, d) }}})
+	if err := c.Do(context.Background(), "POST", P("x"), Request{}, nil); err != nil {
+		t.Fatal(err)
+	}
+	want := []time.Duration{time.Minute, time.Minute, time.Minute}
+	if !reflect.DeepEqual(sleeps, want) || !reflect.DeepEqual(waits, want) {
+		t.Errorf("sleeps %v, waits %v, want %v", sleeps, waits, want)
+	}
+
+	atomic.StoreInt32(&calls, -10) // more 429s than the policy allows
+	err := c.Do(context.Background(), "GET", P("x"), Request{}, nil)
+	var apiErr *Error
+	if !errors.As(err, &apiErr) || apiErr.Status != 429 {
+		t.Fatalf("err = %v, want the 429 once the retries run out", err)
+	}
+}
+
+// With no Sleep injected (the real process), cancelling the context ends a
+// rate-limit wait at once instead of after the server's Retry-After.
+func TestCancelEndsARateLimitWait(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Retry-After", "60")
+		w.WriteHeader(429)
+	}))
+	t.Cleanup(srv.Close)
+	c := New(Options{BaseURL: srv.URL, Token: "t", RateLimit: &RateLimitPolicy{MaxWait: 2 * time.Minute, Retries: 5}})
+
+	ctx, cancel := context.WithCancel(context.Background())
+	time.AfterFunc(50*time.Millisecond, cancel)
+	start := time.Now()
+	err := c.Do(ctx, "GET", P("x"), Request{}, nil)
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("err = %v, want context.Canceled", err)
+	}
+	if took := time.Since(start); took > 5*time.Second {
+		t.Fatalf("Do returned after %s; the wait ignored the cancelled context", took)
+	}
+}
+
 func TestParsesErrorEnvelope(t *testing.T) {
 	c, _ := newTestClient(t, func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(404)

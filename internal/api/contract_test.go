@@ -90,6 +90,20 @@ func TestContractDTOFieldsExist(t *testing.T) {
 		{Page[json.RawMessage]{}, "PublicFlagListItemPagedResult"},
 		{envelope{}, "PublicApiErrorEnvelope"},
 		{ChangeFreeze{}, "PublicChangeFreeze"},
+		{PlanLimits{}, "PublicPlanLimits"},
+		{Prerequisite{}, "PublicPrerequisiteDto"},
+		{SegmentCondition{}, "PublicSegmentConditionDto"},
+		{CreateSegmentRequest{}, "PublicCreateSegmentRequest"},
+		{UpdateSegmentRequest{}, "PublicUpdateSegmentRequest"},
+		{Condition{}, "PublicConditionRequest"},
+		{Condition{}, "PublicConditionResponse"},
+		{ConditionGroup{}, "PublicConditionGroupRequest"},
+		{ConditionGroup{}, "PublicConditionGroupResponse"},
+		{TargetingConfig{}, "PublicTargetingConfigResponse"},
+		{TargetingRule{}, "PublicTargetingRuleResponse"},
+		{RuleRequest{}, "PublicCreateTargetingRuleRequest"},
+		{PutTargetingRequest{}, "PublicPutTargetingRequest"},
+		{UpdateFlagEnvConfigRequest{}, "PublicUpdateFlagEnvConfigRequest"},
 	}
 	for _, c := range cases {
 		schema, ok := schemas[c.schema].(map[string]any)

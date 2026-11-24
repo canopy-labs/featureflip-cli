@@ -30,18 +30,35 @@ var (
 // maxRetryAfter is the longest rate-limit wait the CLI sits through by itself.
 const maxRetryAfter = 10 * time.Second
 
+// RateLimitPolicy is how long, and how often, a client waits out a 429. The
+// default suits one interactive command: a single wait of at most 10s. A bulk
+// writer such as an import sets a patient policy instead.
+type RateLimitPolicy struct {
+	// MaxWait is the longest Retry-After the client waits out.
+	MaxWait time.Duration
+	// Retries is how many waits one request may take.
+	Retries int
+	// OnWait, when set, is told about each wait before it starts.
+	OnWait func(time.Duration)
+}
+
 type Options struct {
 	BaseURL    string
 	Token      string
 	HTTPClient *http.Client
-	Sleep      func(time.Duration)
+	// Sleep replaces the client's waits between retries (tests record them).
+	// Unset, a wait ends early when the request's context is cancelled.
+	Sleep func(time.Duration)
+	// RateLimit overrides the default rate-limit policy when set.
+	RateLimit *RateLimitPolicy
 }
 
 type Client struct {
-	baseURL string
-	token   string
-	http    *http.Client
-	sleep   func(time.Duration)
+	baseURL   string
+	token     string
+	http      *http.Client
+	wait      func(context.Context, time.Duration) error
+	rateLimit RateLimitPolicy
 }
 
 func New(o Options) *Client {
@@ -49,15 +66,36 @@ func New(o Options) *Client {
 	if hc == nil {
 		hc = &http.Client{Timeout: 30 * time.Second}
 	}
-	sleep := o.Sleep
-	if sleep == nil {
-		sleep = time.Sleep
+	wait := waitContext
+	if sleep := o.Sleep; sleep != nil {
+		wait = func(ctx context.Context, d time.Duration) error {
+			sleep(d)
+			return ctx.Err()
+		}
+	}
+	policy := RateLimitPolicy{MaxWait: maxRetryAfter, Retries: 1}
+	if o.RateLimit != nil {
+		policy = *o.RateLimit
 	}
 	return &Client{
-		baseURL: strings.TrimRight(o.BaseURL, "/"),
-		token:   o.Token,
-		http:    hc,
-		sleep:   sleep,
+		baseURL:   strings.TrimRight(o.BaseURL, "/"),
+		token:     o.Token,
+		http:      hc,
+		wait:      wait,
+		rateLimit: policy,
+	}
+}
+
+// waitContext waits d, or until ctx is done, so Ctrl-C during a rate-limit
+// wait stops the command instead of sleeping out the server's Retry-After.
+func waitContext(ctx context.Context, d time.Duration) error {
+	timer := time.NewTimer(d)
+	defer timer.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-timer.C:
+		return nil
 	}
 }
 
@@ -195,7 +233,7 @@ func (c *Client) Do(ctx context.Context, method string, path Path, req Request, 
 		method == http.MethodGet || method == http.MethodHead ||
 		method == http.MethodPut || method == http.MethodDelete
 
-	rateLimitRetried := false
+	rateLimitWaits := 0
 	for attempt := 0; ; attempt++ {
 		retriesLeft := attempt < len(backoffs)
 		resp, err := c.send(ctx, method, target, body, req)
@@ -203,15 +241,22 @@ func (c *Client) Do(ctx context.Context, method string, path Path, req Request, 
 			if ctx.Err() != nil || !replayable || !retriesLeft {
 				return err
 			}
-			c.sleep(backoffs[attempt])
+			if err := c.wait(ctx, backoffs[attempt]); err != nil {
+				return err
+			}
 			continue
 		}
 
 		if resp.StatusCode == http.StatusTooManyRequests {
 			apiErr := decodeError(resp, path)
-			if !rateLimitRetried && apiErr.Wait > 0 && apiErr.Wait <= maxRetryAfter {
-				rateLimitRetried = true
-				c.sleep(apiErr.Wait)
+			if rateLimitWaits < c.rateLimit.Retries && apiErr.Wait > 0 && apiErr.Wait <= c.rateLimit.MaxWait {
+				rateLimitWaits++
+				if c.rateLimit.OnWait != nil {
+					c.rateLimit.OnWait(apiErr.Wait)
+				}
+				if err := c.wait(ctx, apiErr.Wait); err != nil {
+					return err
+				}
 				attempt-- // a rate-limit wait doesn't spend the 5xx retry budget
 				continue
 			}
@@ -224,7 +269,9 @@ func (c *Client) Do(ctx context.Context, method string, path Path, req Request, 
 		}
 		if retryable && retriesLeft {
 			drain(resp)
-			c.sleep(backoffs[attempt])
+			if err := c.wait(ctx, backoffs[attempt]); err != nil {
+				return err
+			}
 			continue
 		}
 
